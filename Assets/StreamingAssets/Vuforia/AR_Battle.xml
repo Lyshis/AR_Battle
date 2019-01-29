@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="EntireLizardtest" size="1.000000 1.000000" />
+    <ImageTarget name="EntireLizard2test" size="1.000000 1.000000" />
+    <ImageTarget name="acadia_np_622419-High-Res" size="1.000000 0.666667" />
+    <ImageTarget name="EntireLizard2" size="1.000000 0.642813" />
+    <ImageTarget name="EntireLizard" size="1.000000 0.726070" />
+    <ImageTarget name="example_5-star_grayscale" size="1.000000 0.700000" />
+    <ImageTarget name="tilleul-arbre" size="1.000000 0.880000" />
+    <ImageTarget name="MarkerLizard" size="1.000000 0.952880" />
+  </Tracking>
+</QCARConfig>
