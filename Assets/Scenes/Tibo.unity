@@ -286,7 +286,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8a2ff8c087854248bf2056a2e52546a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _obstacles: []
+  _obstacles:
+  - {fileID: 1498044593096502, guid: 090249c9ca1a69f488392b2ef02627cd, type: 2}
+  - {fileID: 100004, guid: 28efedc3510a20740a75be9a2a47dfa6, type: 3}
 --- !u!4 &1504375855
 Transform:
   m_ObjectHideFlags: 0
