@@ -4,6 +4,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using UnityEditor.Experimental.UIElements.GraphView;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SocialPlatforms;
 
 public class TurnManager : MonoBehaviour 
@@ -12,15 +13,21 @@ public class TurnManager : MonoBehaviour
     static Queue<string> turnKey = new Queue<string>();
     static Queue<TacticsMove> turnTeam = new Queue<TacticsMove>();
 
+    public static PlayerMove player1;
+    public static PlayerMove player2;
+    
 	// Use this for initialization
-	void Start () 
+	void Start ()
 	{
-		
+	    player1 = GameObject.Find("Player").GetComponent<PlayerMove>();
+	    player2 = GameObject.Find("Player (1)").GetComponent<PlayerMove>();
+	    
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+	    
         if (turnTeam.Count == 0)
         {
             InitTeamTurnQueue();
@@ -119,7 +126,6 @@ public class TurnManager : MonoBehaviour
 
     public static void Hit(int spell, Tile t)
     {
-        Debug.Log("hit");
         if (turnTeam.Peek().actionPoints > 0)
         {
             RaycastHit hit;
@@ -129,12 +135,25 @@ public class TurnManager : MonoBehaviour
                 switch (spell)
                 {
                     case 1:
-                        Debug.Log("spell");
-                        turnTeam.ElementAt(1).health -= 10;
+                        Debug.Log(spell, t);
+                        if (turnTeam.Peek().name == "Player")
+                            player1.health -= 10;
+                        else
+                        {
+                            player2.health -= 10;
+                            
+                        }
+                            
                         turnTeam.Peek().actionPoints -= 1;
                         break;
                     case 2:
-                        turnTeam.ElementAt(1).health -= 5;
+                        if (turnTeam.Peek().name == "Player")
+                            player1.health -= 5;
+                        else
+                        {
+                            player2.health -= 5;
+                            
+                        }
                         turnTeam.Peek().actionPoints -= 1;
                         break;
                     case 3:

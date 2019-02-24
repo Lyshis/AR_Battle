@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.Scripting.APIUpdating;
 
 public class TacticsMove : MonoBehaviour 
@@ -28,6 +30,9 @@ public class TacticsMove : MonoBehaviour
 
     public int actionPoints = 0;
 
+    
+    public TextMeshProUGUI victoryScreen;
+    
     Vector3 velocity = new Vector3();
     Vector3 heading = new Vector3();
 

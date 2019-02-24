@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Analytics;
 
-public class PlayerMove : TacticsMove 
+public class PlayerMove : TacticsMove
 {
     
-
 	// Use this for initialization
 	void Start () 
 	{
@@ -17,6 +17,20 @@ public class PlayerMove : TacticsMove
 	// Update is called once per frame
 	void Update () 
 	{
+	    if (health <= 0)
+	    {
+	        if (name == "Player")
+	        {
+	            victoryScreen.text = "Player 2 Wins";
+
+	        }
+	        else
+	        {
+	            victoryScreen.text = "Player 1 Wins";
+	        }
+	    }
+        
+	    
         Debug.DrawRay(transform.position, transform.forward);
 
         if (!turn)
