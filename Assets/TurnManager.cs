@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
+using UnityEditor.Experimental.UIElements.GraphView;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class TurnManager : MonoBehaviour 
 {
@@ -37,6 +41,11 @@ public class TurnManager : MonoBehaviour
 
     public static void StartTurn()
     {
+        foreach (var player in turnTeam)
+        {
+            player.actualMove = player.move;
+            player.state = 0;
+        }
         if (turnTeam.Count > 0)
         {
             turnTeam.Peek().BeginTurn();
@@ -80,5 +89,65 @@ public class TurnManager : MonoBehaviour
         }
 
         list.Add(unit);
+    }
+
+    public static void SetState(int nb)
+    {
+        turnTeam.Peek().state = nb;
+        
+        switch (nb)
+        {
+            case 0:
+                break;
+            case 1:
+                turnTeam.Peek().range = 1;
+                break;
+            case 2:
+                turnTeam.Peek().range = 3;
+                break;
+            case 3:
+                turnTeam.Peek().range = 0;
+                turnTeam.Peek().actualMove += 2;
+                turnTeam.Peek().actionPoints -= 1;
+                break;
+            case 4:
+                turnTeam.Peek().range = 7;
+                break;
+        }
+        turnTeam.Peek().FindSelectableTiles(turnTeam.Peek().actualMove);
+    }
+
+    public static void Hit(int spell, Tile t)
+    {
+        Debug.Log("hit");
+        if (turnTeam.Peek().actionPoints > 0)
+        {
+            RaycastHit hit;
+            Ray r = new Ray(t.transform.position,t.transform.up);
+            if (Physics.Raycast(r,out hit))
+            {
+                switch (spell)
+                {
+                    case 1:
+                        Debug.Log("spell");
+                        turnTeam.ElementAt(1).health -= 10;
+                        turnTeam.Peek().actionPoints -= 1;
+                        break;
+                    case 2:
+                        turnTeam.ElementAt(1).health -= 5;
+                        turnTeam.Peek().actionPoints -= 1;
+                        break;
+                    case 3:
+                        turnTeam.Peek().actionPoints -= 1;
+                        break;
+                }
+            }
+            else if (spell == 4)
+            {
+                t.walkable = false;
+            }
+        }
+        
+        
     }
 }

@@ -42,6 +42,10 @@ public class Tile : MonoBehaviour
         {
             GetComponent<Renderer>().material.color = Color.red;
         }
+        else if (!walkable)
+        {
+            GetComponent<Renderer>().material.color = Color.black;
+        }
         else
         {
             GetComponent<Renderer>().material.color = Color.white;
@@ -72,6 +76,16 @@ public class Tile : MonoBehaviour
         CheckTile(Vector3.right, jumpHeight, target);
         CheckTile(-Vector3.right, jumpHeight, target);
     }
+    
+    public void FindNeighborsNonWalkable(float jumpHeight, Tile target)
+    {
+        Reset();
+
+        CheckTileNonWalkable(Vector3.forward, jumpHeight, target);
+        CheckTileNonWalkable(-Vector3.forward, jumpHeight, target);
+        CheckTileNonWalkable(Vector3.right, jumpHeight, target);
+        CheckTileNonWalkable(-Vector3.right, jumpHeight, target);
+    }
 
     public void CheckTile(Vector3 direction, float jumpHeight, Tile target)
     {
@@ -89,6 +103,21 @@ public class Tile : MonoBehaviour
                 {
                     adjacencyList.Add(tile);
                 }
+            }
+        }
+    }
+    
+    public void CheckTileNonWalkable(Vector3 direction, float jumpHeight, Tile target)
+    {
+        Vector3 halfExtents = new Vector3(0.25f, (1 + jumpHeight) / 2.0f, 0.25f);
+        Collider[] colliders = Physics.OverlapBox(transform.position + direction, halfExtents);
+
+        foreach (Collider item in colliders)
+        {
+            Tile tile = item.GetComponent<Tile>();
+            if (tile != null)
+            {
+                adjacencyList.Add(tile);
             }
         }
     }

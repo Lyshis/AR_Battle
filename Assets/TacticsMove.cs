@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 public class TacticsMove : MonoBehaviour 
 {
@@ -17,6 +19,14 @@ public class TacticsMove : MonoBehaviour
     public float jumpHeight = 2;
     public float moveSpeed = 2;
     public float jumpVelocity = 4.5f;
+
+    public int range;
+    public int actualMove;
+
+    public int health = 50;
+    public int state = 0;
+
+    public int actionPoints = 0;
 
     Vector3 velocity = new Vector3();
     Vector3 heading = new Vector3();
@@ -63,7 +73,6 @@ public class TacticsMove : MonoBehaviour
 
     public void ComputeAdjacencyLists(float jumpHeight, Tile target)
     {
-        //tiles = GameObject.FindGameObjectsWithTag("Tile");
 
         foreach (GameObject tile in tiles)
         {
@@ -71,17 +80,33 @@ public class TacticsMove : MonoBehaviour
             t.FindNeighbors(jumpHeight, target);
         }
     }
-
-    public void FindSelectableTiles()
+    public void ComputeAdjacencyListsNonWalkable(float jumpHeight, Tile target)
     {
-        ComputeAdjacencyLists(jumpHeight, null);
+
+        foreach (GameObject tile in tiles)
+        {
+            Tile t = tile.GetComponent<Tile>();
+            t.FindNeighborsNonWalkable(jumpHeight, target);
+        }
+    }
+
+    public void FindSelectableTiles(int range)
+    {
+        if (state == 0)
+        {
+            
+            ComputeAdjacencyLists(jumpHeight, null);
+        }
+        else
+        {
+            ComputeAdjacencyListsNonWalkable(jumpHeight,null);
+        }
         GetCurrentTile();
 
         Queue<Tile> process = new Queue<Tile>();
 
         process.Enqueue(currentTile);
         currentTile.visited = true;
-        //currentTile.parent = ??  leave as null 
 
         while (process.Count > 0)
         {
@@ -89,8 +114,8 @@ public class TacticsMove : MonoBehaviour
 
             selectableTiles.Add(t);
             t.selectable = true;
-
-            if (t.distance < move)
+            
+            if (t.distance < range)
             {
                 foreach (Tile tile in t.adjacencyList)
                 {
@@ -106,8 +131,11 @@ public class TacticsMove : MonoBehaviour
         }
     }
 
+
     public void MoveToTile(Tile tile)
     {
+        actualMove++;
+
         path.Clear();
         tile.target = true;
         moving = true;
@@ -117,13 +145,17 @@ public class TacticsMove : MonoBehaviour
         {
             path.Push(next);
             next = next.parent;
+            actualMove--;
         }
     }
 
     public void Move()
     {
+        
         if (path.Count > 0)
         {
+            
+            
             Tile t = path.Peek();
             Vector3 target = t.transform.position;
 
@@ -153,15 +185,25 @@ public class TacticsMove : MonoBehaviour
                 //Tile center reached
                 transform.position = target;
                 path.Pop();
+                //actualMove--;
+
             }
+
         }
         else
         {
             RemoveSelectableTiles();
             moving = false;
+//
+//            if (this.gameObject.name != "Player" )
+//            {
+//                TurnManager.EndTurn();
+//            }
 
-            TurnManager.EndTurn();
+            
         }
+        
+        
     }
 
     protected void RemoveSelectableTiles()
@@ -334,7 +376,6 @@ public class TacticsMove : MonoBehaviour
 
         List<Tile> openList = new List<Tile>();
         List<Tile> closedList = new List<Tile>();
-
         openList.Add(currentTile);
         //currentTile.parent = ??
         currentTile.h = Vector3.Distance(currentTile.transform.position, target.transform.position);
@@ -380,17 +421,20 @@ public class TacticsMove : MonoBehaviour
                     tile.f = tile.g + tile.h;
 
                     openList.Add(tile);
+                    
+                    
+                    
                 }
             }
         }
 
-        //todo - what do you do if there is no path to the target tile?
-        Debug.Log("Path not found");
     }
 
     public void BeginTurn()
     {
         turn = true;
+        if (actionPoints < 2)
+            actionPoints++;
     }
 
     public void EndTurn()

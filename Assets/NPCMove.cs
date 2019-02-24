@@ -26,7 +26,8 @@ public class NPCMove : TacticsMove
         {
             FindNearestTarget();
             CalculatePath();
-            FindSelectableTiles();
+            FindSelectableTiles(actualMove);
+            
             actualTargetTile.target = true;
         }
         else
@@ -34,6 +35,8 @@ public class NPCMove : TacticsMove
             Move();
         }
 	}
+    
+    
 
     void CalculatePath()
     {

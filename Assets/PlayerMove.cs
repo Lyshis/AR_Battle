@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class PlayerMove : TacticsMove 
 {
+    
 
 	// Use this for initialization
 	void Start () 
@@ -23,13 +26,21 @@ public class PlayerMove : TacticsMove
 
         if (!moving)
         {
-            FindSelectableTiles();
+            if (state == 0)
+            {
+                FindSelectableTiles(actualMove);
+            }
+            else
+            {
+                FindSelectableTiles(range);
+            }
             CheckMouse();
         }
         else
         {
             anim.Play("walklSpear",0);
             Move();
+            
             
         }
 	}
@@ -49,7 +60,15 @@ public class PlayerMove : TacticsMove
 
                     if (t.selectable)
                     {
-                        MoveToTile(t);
+                        switch (state)
+                        {
+                            case 0:
+                                MoveToTile(t);
+                                break;
+                            default:
+                                TurnManager.Hit(state,t);
+                                break;
+                        }
                     }
                 }
             }
