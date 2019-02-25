@@ -1,13 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using UnityEditor.Experimental.UIElements.GraphView;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SocialPlatforms;
 
-public class TurnManager : MonoBehaviour 
+public class TurnManager : MonoBehaviour
 {
     static Dictionary<string, List<TacticsMove>> units = new Dictionary<string, List<TacticsMove>>();
     static Queue<string> turnKey = new Queue<string>();
@@ -15,24 +9,22 @@ public class TurnManager : MonoBehaviour
 
     public static PlayerMove player1;
     public static PlayerMove player2;
-    
-	// Use this for initialization
-	void Start ()
-	{
-	    player1 = GameObject.Find("Player").GetComponent<PlayerMove>();
-	    player2 = GameObject.Find("Player (1)").GetComponent<PlayerMove>();
-	    
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-	    
+
+    // Use this for initialization
+    void Start()
+    {
+        player1 = GameObject.Find("Player").GetComponent<PlayerMove>();
+        player2 = GameObject.Find("Player (1)").GetComponent<PlayerMove>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         if (turnTeam.Count == 0)
         {
             InitTeamTurnQueue();
         }
-	}
+    }
 
     static void InitTeamTurnQueue()
     {
@@ -53,6 +45,7 @@ public class TurnManager : MonoBehaviour
             player.actualMove = player.move;
             player.state = 0;
         }
+
         if (turnTeam.Count > 0)
         {
             turnTeam.Peek().BeginTurn();
@@ -101,7 +94,7 @@ public class TurnManager : MonoBehaviour
     public static void SetState(int nb)
     {
         turnTeam.Peek().state = nb;
-        
+
         switch (nb)
         {
             case 0:
@@ -121,6 +114,7 @@ public class TurnManager : MonoBehaviour
                 turnTeam.Peek().range = 7;
                 break;
         }
+
         turnTeam.Peek().FindSelectableTiles(turnTeam.Peek().actualMove);
     }
 
@@ -129,8 +123,8 @@ public class TurnManager : MonoBehaviour
         if (turnTeam.Peek().actionPoints > 0)
         {
             RaycastHit hit;
-            Ray r = new Ray(t.transform.position,t.transform.up);
-            if (Physics.Raycast(r,out hit))
+            Ray r = new Ray(t.transform.position, t.transform.up);
+            if (Physics.Raycast(r, out hit))
             {
                 switch (spell)
                 {
@@ -141,9 +135,8 @@ public class TurnManager : MonoBehaviour
                         else
                         {
                             player2.health -= 10;
-                            
                         }
-                            
+
                         turnTeam.Peek().actionPoints -= 1;
                         break;
                     case 2:
@@ -152,8 +145,8 @@ public class TurnManager : MonoBehaviour
                         else
                         {
                             player2.health -= 5;
-                            
                         }
+
                         turnTeam.Peek().actionPoints -= 1;
                         break;
                     case 3:
@@ -166,7 +159,5 @@ public class TurnManager : MonoBehaviour
                 t.walkable = false;
             }
         }
-        
-        
     }
 }

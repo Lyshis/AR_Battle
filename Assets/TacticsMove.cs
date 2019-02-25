@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
-using UnityEngine.Scripting.APIUpdating;
 
 
 public class TacticsMove : MonoBehaviour
@@ -63,6 +59,7 @@ public class TacticsMove : MonoBehaviour
     public void GetCurrentTile()
     {
         currentTile = GetTargetTile(gameObject);
+        Debug.Log(currentTile);
         currentTile.current = true;
     }
 
@@ -70,9 +67,12 @@ public class TacticsMove : MonoBehaviour
     {
         RaycastHit hit;
         Tile tile = null;
-
-        if (Physics.Raycast(target.transform.position, Vector3.down, out hit, 1))
+        Vector3 down = -target.transform.up;
+        Debug.Log(down);
+        
+        if (Physics.Raycast(target.transform.position, down, out hit, 10))
         {
+            
             tile = hit.collider.GetComponent<Tile>();
         }
 

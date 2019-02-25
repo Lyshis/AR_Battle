@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using TMPro;
+﻿using System;
 using UnityEngine;
-using UnityEngine.Analytics;
 
 public class PlayerMove : TacticsMove
 {
@@ -80,7 +76,10 @@ public class PlayerMove : TacticsMove
                         switch (state)
                         {
                             case 0:
-                                MoveToTile(t);
+	                            Vector3 vector = transform.position - t.transform.position;
+	                            actualMove -= (int)Math.Abs(vector.magnitude);
+	                            transform.position = new Vector3(t.transform.position.x,transform.position.y, t.transform.position.z);
+                                
                                 break;
                             default:
                                 TurnManager.Hit(state,t);

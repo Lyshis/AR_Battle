@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Characters {
+﻿namespace Characters {
 	public interface ICharacter {
 		int GetMovement();
 		void DecreaseMovement(int slow);
