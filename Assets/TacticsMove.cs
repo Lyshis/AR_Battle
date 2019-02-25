@@ -6,8 +6,11 @@ using UnityEngine;
 using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.Scripting.APIUpdating;
 
-public class TacticsMove : MonoBehaviour 
+
+public class TacticsMove : MonoBehaviour
 {
+    public GameObject tricks;
+    
     public bool turn = false;
 
     List<Tile> selectableTiles = new List<Tile>();

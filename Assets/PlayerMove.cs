@@ -17,46 +17,49 @@ public class PlayerMove : TacticsMove
 	// Update is called once per frame
 	void Update () 
 	{
-	    if (health <= 0)
+	    if (tricks.GetComponent<MeshRenderer>().enabled)
 	    {
-	        if (name == "Player")
+		    if (health <= 0)
 	        {
-	            victoryScreen.text = "Player 2 Wins";
+	            if (name == "Player")
+	            {
+	                victoryScreen.text = "Player 2 Wins";
 
+	            }
+	            else
+	            {
+	                victoryScreen.text = "Player 1 Wins";
+	            }
 	        }
-	        else
-	        {
-	            victoryScreen.text = "Player 1 Wins";
-	        }
+	        
+		    Debug.DrawRay(transform.position, transform.forward);
+
+		    if (!turn)
+		    {
+			    return;
+		    }
+
+		    if (!moving)
+		    {
+			    if (state == 0)
+			    {
+				    FindSelectableTiles(actualMove);
+			    }
+			    else
+			    {
+				    FindSelectableTiles(range);
+			    }
+			    CheckMouse();
+		    }
+		    else
+		    {
+			    anim.Play("walklSpear",0);
+			    Move();
+            
+            
+		    }
 	    }
-        
 	    
-        Debug.DrawRay(transform.position, transform.forward);
-
-        if (!turn)
-        {
-            return;
-        }
-
-        if (!moving)
-        {
-            if (state == 0)
-            {
-                FindSelectableTiles(actualMove);
-            }
-            else
-            {
-                FindSelectableTiles(range);
-            }
-            CheckMouse();
-        }
-        else
-        {
-            anim.Play("walklSpear",0);
-            Move();
-            
-            
-        }
 	}
 
     void CheckMouse()
